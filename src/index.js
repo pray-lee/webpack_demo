@@ -1,3 +1,6 @@
-const image = require('./assets/1.jpg')
-// 输出的是文件名
+import image from './assets/1.jpg'
+// 输出的是文件名, 不带路径呦!!
 console.log(image)
+
+//css 
+import './index.scss'

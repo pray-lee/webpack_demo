@@ -1,0 +1,18 @@
+body{
+  #root{
+    color:#ff6700;
+    font-size: 32px;
+    animation: test 1s linear alternate infinite
+  }
+}
+@keyframes test{
+  0%{
+    font-size: 36px
+  }
+  50%{
+    font-size: 50px;
+  }
+  100%{
+    font-size: 18px
+  }
+}
