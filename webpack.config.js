@@ -1,9 +1,20 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 module.exports = {
   mode: 'development',
+  // sourceMap, devtool就是用来配置sourceMap的, inline的意思是不生成map文件，把映射关系写在打包好的文件里。cheap的意思是只提示多少行有错误，不提示多少列。module是如果loader里面发生错误，也会提示,如果不写module的话，就只会提示业务代码，不会检测loader里的错误.
+  // development推荐:  devtool: 'cheap-module-eval-source-map',
+  // production推荐:   devtool: 'cheap-module-source-map',
+  devtool: 'cheap-module-eval-source-map',
+  devServer: { // 开发服务器，只需要在package.json的scripts里面配置命令`webpack-dev-server`就可以了
+    open: true, // 打开浏览器
+    port: 8081, // 端口
+    contentBase: './dist'
+  },
   entry: {
-    main: './src/index.js'
+    main: './src/index.js',
+    sub: './src/index.js',
   },
   module: {
     rules: [
@@ -13,10 +24,10 @@ module.exports = {
         use:{
           loader: 'url-loader',
           options: {
-            name: '[name].[ext]',
-            // outputPath 是文件的输出路径, publicPath 是在打包后的文件夹根目录访问时的公共路径, 如果设置了outputPath的话，则publicPath也要对应设置，才能访问到对应的文件,如果不设置，默认就是根目录，publicPath也设置成'/'或者不设置就可以了
-            // outputPath: 'assets/',
-            // publicPath: './assets/',
+            name: '[name].[hash].[ext]',
+            // outputPath 是文件的输出路径, publicPath 是在打包后的文件夹根目录访问时的公共路径(通过import或者require引入的文件，本质就是加上publicPath路径的文件名), 如果设置了outputPath的话，则publicPath默认会改变为和outputPath一样的路径，进而访问到对应的文件,如果不设置，默认就是根目录, 也可以人为去配置。前提是如果服务端的资源存放位置发生了变化的话，这里在打包的时候就可以手动配置publicPath。
+            outputPath: './assets/', // outputPath默认指向打包输出的文件夹所在目录
+            // publicPath: '/assets/',
             limit: 2048 // 当大于两k的时候，就不会转换base64, 这个单位是字节
           }
         }
@@ -29,7 +40,7 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              // importLoaders: 2,
+              // importLoaders: 2,  // 这个选项的意思是 如果css里有通过@import引入的模块，他有可能不会走postcss-loader和sass-loader,加上这个配置，通过@import引入的css模块就会从下到上执行postcss-laoder和sass-loader
               // modules: true
             }
           },
@@ -40,10 +51,14 @@ module.exports = {
     ]
   },
   plugins: [
-    new HtmlWebpackPlugin()
+    new HtmlWebpackPlugin({
+      template: './index.html'
+    }),
+    new CleanWebpackPlugin()
   ],
   output: {
-    filename: 'main.js',
+    publicPath: '/',  // 这块的publicPath是指打包完成之后，html文件里面引用的资源路径会加上这个前缀
+    filename: '[name].js',
     path: path.resolve(__dirname, 'dist')
   }
 }
