@@ -1,7 +1,10 @@
 body{
   #root{
+    width:100px;
+    height:600px;
     color:#ff6700;
     font-size: 32px;
+    background: url(./assets/1.jpg);
     animation: test 1s linear alternate infinite
   }
 }
