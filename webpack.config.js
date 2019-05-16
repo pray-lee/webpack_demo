@@ -1,6 +1,7 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
+const webpack = require('webpack')
 module.exports = {
   mode: 'development',
   // sourceMap, devtool就是用来配置sourceMap的, inline的意思是不生成map文件，把映射关系写在打包好的文件里。cheap的意思是只提示多少行有错误，不提示多少列。module是如果loader里面发生错误，也会提示,如果不写module的话，就只会提示业务代码，不会检测loader里的错误.
@@ -10,14 +11,34 @@ module.exports = {
   devServer: { // 开发服务器，只需要在package.json的scripts里面配置命令`webpack-dev-server`就可以了
     open: true, // 打开浏览器
     port: 8081, // 端口
-    contentBase: './dist'
+    contentBase: './dist',
+    hot: true, // 开启模块热更新, 光配这个不行，还需要引入webpack里面的hot-module-replacement-plugin, 在插件配置中加入
+    // hotOnly: true, // hmr不生效的话，html不会刷新 
   },
   entry: {
     main: './src/index.js',
-    sub: './src/index.js',
   },
   module: {
     rules: [
+      // es6转es5
+      {
+        test: /\.js$/,
+        exclude: '/node_modules/',
+        use:{
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              ['@babel/preset-env', {
+                useBuiltIns: 'entry',
+                corejs: 3,
+                targets: {
+                  chrome: '67'
+                }
+              }]
+            ]
+          }
+        } 
+      },
       // 打包图片文件
       {
         test: /\.(jpg|png)$/,
@@ -47,6 +68,14 @@ module.exports = {
           'sass-loader',
           'postcss-loader'
         ]
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          'postcss-loader'
+        ]
       }
     ]
   },
@@ -54,7 +83,8 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './index.html'
     }),
-    new CleanWebpackPlugin()
+    new CleanWebpackPlugin(),
+    new webpack.HotModuleReplacementPlugin()
   ],
   output: {
     publicPath: '/',  // 这块的publicPath是指打包完成之后，html文件里面引用的资源路径会加上这个前缀
