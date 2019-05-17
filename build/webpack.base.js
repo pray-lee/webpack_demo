@@ -11,7 +11,7 @@ module.exports = {
       // es6转es5
       {
         test: /\.js$/,
-        exclude: '/node_modules/',
+        exclude: /node_modules/,
         use:{
           loader: 'babel-loader',
           options: {
@@ -23,7 +23,8 @@ module.exports = {
                   chrome: '67'
                 }
               }]
-            ] 
+            ],
+            plugins: ['@babel/plugin-syntax-dynamic-import'] 
           }
         }
       },
@@ -73,9 +74,51 @@ module.exports = {
     }),
     new CleanWebpackPlugin()
   ],
+  optimization: {
+    // 配置代码分割
+    splitChunks: {
+      chunks: 'all', // 同步模块会走下面的cacheGroups，如果符合要求，才会进行打包
+      minSize: 30000, // 大于这个值才会打包
+      maxSize: 0, // 一般不用配
+      minChunks: 1, // 如果有这个数量以上的chunk使用了一个库, 就会对这个库进行打包
+      maxAsyncRequests: 5, // 一般用默认 
+      maxInitialRequests: 3, // 一般用默认
+      automaticNameDelimiter: '~', // 组和文件之间的连接符
+      name: true, // 一般用默认
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules[\\/]/, // 如果需要分割的代码在这个目录下，才会打包
+          priority: -10, // 组的优先级
+          filename: 'vendor.js' // 打包文件的重新命名
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true // 如果之前打包过，就不需要再次打包了。
+        }
+      }
+    } 
+  }, 
   output: {
     publicPath: '/',  // 这块的publicPath是指打包完成之后，html文件里面引用的资源路径会加上这个前缀
     filename: '[name].js',
     path: path.resolve(__dirname, '../dist')
+  },
+  // 配置提示信息
+  performance: {
+    // false | "error" | "warning" // 不显示性能提示 | 以错误形式提示 | 以警告...
+    hints: "warning",
+    // 开发环境设置较大防止警告
+    // 根据入口起点的最大体积，控制webpack何时生成性能提示,整数类型,以字节为单位
+    maxEntrypointSize: 5000000, 
+    // 最大单个资源体积，默认250000 (bytes)
+    maxAssetSize: 3000000
   }
 }
+
+// coding splitting 本身和wepback 无关
+// webpack 实现代码分割，两种方式
+// 1. 同步代码
+  // 只需要在webpack.base.js中做optimization的配置就行
+// 2. 异步代码 (import().then( () => () )
+  // 无需做任何配置，会自动进行代码分割

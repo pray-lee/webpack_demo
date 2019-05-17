@@ -3,8 +3,15 @@ import "core-js/stable";
 import "regenerator-runtime/runtime";
 // ------------------------------------------
 
-import image from './assets/1.jpg'
-console.log(image)
+// 引入lodash 测试code splitting
+// lodash util -------------------------------
+import _ from 'lodash'
+console.log(_)
+
+
+import('./assets/1.jpg').then( ({image}) => {
+  console.log(image)
+} )
 // 输出的是 publicPath/文件名.ext, (publicPath的来源是file-loader里options的配置项)
 // var img = new Image()
 // img.src = image

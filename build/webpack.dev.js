@@ -20,7 +20,7 @@ const devConfig = {
   // tree shaking options 配置项, 这里配置完成之后，package.json里面也得配一下sideEffects
   // 如果是在production模式下，下面这个配置就不需要了
   optimization: {
-    usedExports: true
+    usedExports: true,
   },
 }
 
