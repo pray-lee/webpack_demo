@@ -4,6 +4,7 @@ import "regenerator-runtime/runtime";
 // ------------------------------------------
 
 import image from './assets/1.jpg'
+console.log(image)
 // 输出的是 publicPath/文件名.ext, (publicPath的来源是file-loader里options的配置项)
 // var img = new Image()
 // img.src = image
@@ -29,4 +30,4 @@ import './style.css'
 
 // tree shaking test
 import { add } from './math'
-add()
+add(1,4)
