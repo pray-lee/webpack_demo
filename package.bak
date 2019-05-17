@@ -1,7 +1,9 @@
 {
   "name": "webpack_demo",
   "version": "1.0.0",
+  // 这里是配置tree shaking 必须配置的，就是说如果在这里配置了的话，tree shaking 就不会处理这里面的文件, 通常配置一些css文件,和引入的一些三方库
   "sideEffects": ["core-js", "regenerator-runtime"],
+  "sideEffects": false,
   "private": true,
   "scripts": {
     "build": "webpack",

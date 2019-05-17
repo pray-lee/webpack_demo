@@ -26,3 +26,7 @@ function test () {
 //css 
 import './index.scss'
 import './style.css'
+
+// tree shaking test
+import { add } from './math'
+add()

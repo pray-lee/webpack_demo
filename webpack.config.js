@@ -86,6 +86,11 @@ module.exports = {
     new CleanWebpackPlugin(),
     new webpack.HotModuleReplacementPlugin()
   ],
+  // tree shaking options 配置项, 这里配置完成之后，package.json里面也得配一下sideEffects
+  // 如果是在production模式下，下面这个配置就不需要了
+  optimization: {
+    usedExports: true
+  },
   output: {
     publicPath: '/',  // 这块的publicPath是指打包完成之后，html文件里面引用的资源路径会加上这个前缀
     filename: '[name].js',
