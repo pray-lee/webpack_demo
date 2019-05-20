@@ -41,6 +41,11 @@ const devConfig = {
       }
     ]
   },
+  output: {
+    // 生成环境避免缓存的方法。每个文件后面加一个contenthash,如果文件内容发生变话，contenthash也会相应发生变化
+    filename: '[name].js',
+    chunkFilename: '[name].chunk.js'
+  },
   plugins: [
     new webpack.HotModuleReplacementPlugin()
   ],

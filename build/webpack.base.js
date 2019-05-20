@@ -80,8 +80,6 @@ module.exports = {
   }, 
   output: {
     publicPath: '/',  // 这块的publicPath是指打包完成之后，html文件里面引用的资源路径会加上这个前缀
-    filename: '[name].js',
-    chunkFilename: '[name].chunk.js', // 非入口文件打包出来的文件名称重命名
     path: path.resolve(__dirname, '../dist')
   },
   // 配置提示信息

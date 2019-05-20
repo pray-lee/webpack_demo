@@ -37,6 +37,10 @@ const prodConfig = {
     // css代码压缩插件的使用
     minimizer: [new OptimizeCssAssetsPlugin({})]
   },
+  output: {
+    filename: '[name].[contenthash].js',
+    chunkFilename: '[name].[contenthash].js'
+  },
   // css代码抽取
   plugins: [new MiniCssExtractPlugin({
     filename: '[name].css',
