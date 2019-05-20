@@ -89,7 +89,7 @@ module.exports = {
         vendors: {
           test: /[\\/]node_modules[\\/]/, // 如果需要分割的代码在这个目录下，才会打包
           priority: -10, // 组的优先级
-          filename: 'vendor.js' // 打包文件的重新命名
+          filename: 'vendor.js' // --------------打包文件的重新命名, 这个名字会覆盖叼output配置项里面的chunkFilename---------------------
         },
         default: {
           minChunks: 2,
@@ -102,6 +102,7 @@ module.exports = {
   output: {
     publicPath: '/',  // 这块的publicPath是指打包完成之后，html文件里面引用的资源路径会加上这个前缀
     filename: '[name].js',
+    chunkFilename: '[name].chunk.js', // 非入口文件打包出来的文件名称重命名
     path: path.resolve(__dirname, '../dist')
   },
   // 配置提示信息
@@ -122,3 +123,6 @@ module.exports = {
   // 只需要在webpack.base.js中做optimization的配置就行
 // 2. 异步代码 (import().then( () => () )
   // 无需做任何配置，会自动进行代码分割
+
+// 为什么代码分割默认用async呢？
+ // 因为使用webpack的话，最好是使用async（异步）的方式进行代码编写，这样才能最好的优化前端性能。避免当前用不到的资源也同时加载。节省了带宽，提高网站打开速度.
