@@ -9,13 +9,14 @@ import _ from 'lodash'
 console.log(_)
 
 
-import('./assets/1.jpg').then( ({image}) => {
+import('./assets/1.jpg').then( ({default:image}) => {
+  // 输出的是 publicPath/文件名.ext, (publicPath的来源是file-loader里options的配置项)
   console.log(image)
+  var img = new Image()
+  img.src = image
+  document.body.appendChild(img)
 } )
-// 输出的是 publicPath/文件名.ext, (publicPath的来源是file-loader里options的配置项)
-// var img = new Image()
-// img.src = image
-// document.body.appendChild(img)
+
 
 let button = document.createElement('button')
 button.innerHTML = 'add item'
@@ -31,8 +32,9 @@ document.body.appendChild(button)
 function test () {
   return new Promise(() => {})
 }
-//css 
+//css  测试代码抽离和css导入等功能
 import './index.scss'
+import './style.scss'
 import './style.css'
 
 // tree shaking test

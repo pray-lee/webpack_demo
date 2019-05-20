@@ -14,14 +14,36 @@ const devConfig = {
     hot: true, // 开启模块热更新, 光配这个不行，还需要引入webpack里面的hot-module-replacement-plugin, 在插件配置中加入
     // hotOnly: true, // hmr不生效的话，html不会刷新 
   },
+  module: {
+    rules: [
+      {
+        test: /\.scss$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 2,
+              // modules: true
+            }
+          },
+          'sass-loader',
+          'postcss-loader'
+        ]
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          'postcss-loader'
+        ]
+      }
+    ]
+  },
   plugins: [
     new webpack.HotModuleReplacementPlugin()
   ],
-  // tree shaking options 配置项, 这里配置完成之后，package.json里面也得配一下sideEffects
-  // 如果是在production模式下，下面这个配置就不需要了
-  optimization: {
-    usedExports: true,
-  },
 }
 
 module.exports = merge(baseConfig, devConfig)

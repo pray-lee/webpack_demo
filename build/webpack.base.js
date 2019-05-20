@@ -42,30 +42,6 @@ module.exports = {
           }
         }
       },
-      // 打包静态样式文件
-      {
-        test: /\.scss$/,
-        use:[
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 2,// 这个选项的意思是 如果css里有通过@import引入的模块，他有可能不会走postcss-loader和sass-loader,加上这个配置，通过@import引入的css模块就会从下到上执行postcss-laoder和sass-loader
-              // modules: true // css 文件模块化
-            }
-          },
-          'sass-loader',
-          'postcss-loader'
-        ]
-      },
-      {
-        test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          'postcss-loader'
-        ]
-      }
     ]
   },
   plugins: [
@@ -75,6 +51,9 @@ module.exports = {
     new CleanWebpackPlugin()
   ],
   optimization: {
+  // tree shaking options 配置项, 这里配置完成之后，package.json里面也得配一下sideEffects
+  // 如果是在production模式下，下面这个配置就不需要了
+    usedExports: true,
     // 配置代码分割
     splitChunks: {
       chunks: 'all', // 同步模块会走下面的cacheGroups，如果符合要求，才会进行打包
@@ -89,7 +68,7 @@ module.exports = {
         vendors: {
           test: /[\\/]node_modules[\\/]/, // 如果需要分割的代码在这个目录下，才会打包
           priority: -10, // 组的优先级
-          filename: 'vendor.js' // --------------打包文件的重新命名, 这个名字会覆盖叼output配置项里面的chunkFilename---------------------
+          // filename: 'vendor.js' // --------------打包文件的重新命名, 这个名字会覆盖叼output配置项里面的chunkFilename---------------------
         },
         default: {
           minChunks: 2,
