@@ -13,6 +13,19 @@ const devConfig = {
     contentBase: './dist',
     hot: true, // 开启模块热更新, 光配这个不行，还需要引入webpack里面的hot-module-replacement-plugin, 在插件配置中加入
     // hotOnly: true, // hmr不生效的话，html不会刷新 
+    proxy: {
+      // '/api': 'http://localhost:3000' // 如果访问的路径是/api开头的，那么就把请求代理到localhost的服务器上.
+      '/api': {
+        target: 'http:localhost:3000',
+        pathRewrite: {      // 路径重写，如果不想在接口里添加/api的话，就把他换成空的
+          '^/api': '',
+          'header.json': 'demo.json' // 如果访问的是header.json， 设置这个话，得到的就是demo的数据
+        },
+        changeOrigin: true, // 一般都设置上即可
+        secure: false // 设置成false之后，就可以使用https协议了。
+      } 
+
+    }
   },
   module: {
     rules: [
