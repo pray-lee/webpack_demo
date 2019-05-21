@@ -26,6 +26,7 @@ const prodConfig = {
       {
         test: /\.css$/,
         use: [
+          // style-loader用minicssextractplugin.loader代替
           MiniCssExtractPlugin.loader,
           'css-loader',
           'postcss-loader'
@@ -38,14 +39,17 @@ const prodConfig = {
     minimizer: [new OptimizeCssAssetsPlugin({})]
   },
   output: {
+    // 生成环境避免缓存的方法。每个文件后面加一个contenthash,如果文件内容发生变话，contenthash也会相应发生变化
     filename: '[name].[contenthash].js',
     chunkFilename: '[name].[contenthash].js'
   },
   // css代码抽取
-  plugins: [new MiniCssExtractPlugin({
-    filename: '[name].css',
-    chunkFilename: '[id].chunk.css'
-  })]
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      chunkFilename: '[id].chunk.css'
+    })
+  ]
 }
 
 module.exports = merge(baseConfig, prodConfig)
