@@ -21,7 +21,7 @@ const devConfig = {
           '^/api': '',
           'header.json': 'demo.json' // 如果访问的是header.json， 设置这个话，得到的就是demo的数据
         },
-        changeOrigin: true, // 一般都设置上即可
+        changeOrigin: true, // 一般都设置上即可, 意思是不保留主机头
         secure: false // 设置成false之后，就可以使用https协议了。
       } 
 
